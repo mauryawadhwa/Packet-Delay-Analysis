@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Network Delay Analysis Tool
 
 🔗 **Live Demo:** [https://packet-delay-analysis.onrender.com](https://packet-delay-analysis.onrender.com)
