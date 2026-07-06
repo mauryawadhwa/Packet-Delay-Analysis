@@ -105,11 +105,12 @@ def analyze_pcap(filepath, file_format):
                 })
     except Exception as e:
         raise Exception(f'Error processing {file_format} file: {str(e)}')
-    finally:
+finally:
         if cap:
             cap.close()
         if temp_pcap and os.path.exists(temp_pcap):
-            os.remove(temp_pcap)  # Clean up temporary files
+            os.remove(temp_pcap)
+        loop.close()
     
     if not packets:
         return {
