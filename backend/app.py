@@ -62,6 +62,13 @@ def analyze_pcap(filepath, file_format):
         filepath (str): Path to the capture file
         file_format (str): Format of the capture file (pcap, pcapng, etl, erf)
     """
+    # pyshark needs an asyncio event loop, but Flask handles each request
+    # in a worker thread that doesn't have one by default in Python 3.10+
+    try:
+        asyncio.get_event_loop()
+    except RuntimeError:
+        asyncio.set_event_loop(asyncio.new_event_loop())
+
     packets = []
     cap = None
     temp_pcap = None
