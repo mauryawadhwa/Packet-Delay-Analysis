@@ -1,16 +1,8 @@
 services:
   - type: web
     name: packet-delay-analysis
-    env: python
-    buildCommand: |
-      apt-get update && apt-get install -y tshark
-      cd frontend && npm install && npm run build && cd ..
-      mkdir -p backend/static
-      cp -r frontend/build/* backend/static/
-      cd backend && pip install -r ../requirements.txt
-    startCommand: cd backend && gunicorn app:app
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.10.11
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     healthCheckPath: /
     autoDeploy: true
