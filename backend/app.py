@@ -1,12 +1,28 @@
 import os
+import platform
+import shutil
 import pyshark
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
-# Configure TShark path
-os.environ['WIRESHARK_PATH'] = '/opt/homebrew/bin'
+# Configure TShark path (only if not already discoverable on PATH)
+if shutil.which('tshark') is None:
+    system = platform.system()
+    if system == 'Darwin':
+        # Common macOS install locations (Homebrew / Wireshark.app)
+        for path in ['/opt/homebrew/bin', '/usr/local/bin', '/Applications/Wireshark.app/Contents/MacOS']:
+            if os.path.exists(path):
+                os.environ['PATH'] += os.pathsep + path
+                break
+    elif system == 'Windows':
+        # Common Windows install locations
+        for path in [r'C:\Program Files\Wireshark', r'C:\Program Files (x86)\Wireshark']:
+            if os.path.exists(path):
+                os.environ['PATH'] += os.pathsep + path
+                break
+    # On Linux (including Render), tshark from apt-get is already on PATH
+
 from werkzeug.utils import secure_filename
-import pyshark
 import pandas as pd
 import numpy as np
 from datetime import datetime
